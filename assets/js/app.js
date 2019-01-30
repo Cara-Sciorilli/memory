@@ -23,4 +23,3 @@ $(() => {
   let root = $('#root')[0];
   game_init(root);
 });
-
