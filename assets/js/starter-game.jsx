@@ -57,9 +57,11 @@ class Starter extends React.Component {
       clicks: 0,
       lastIndex: -1,
     });
+    this.timer = null;
   }
 
-  check_match(ii, xs) {
+  check_match(ii) {
+    let xs = this.state.squares;
     let last = this.state.lastIndex;
     if(xs[ii].value != xs[last].value) {
       let ys = _.map(this.state.squares, (square, jj) => {
@@ -70,29 +72,33 @@ class Starter extends React.Component {
           return square;
         }
       });
-      this.setState(_.assign({}, this.state, {squares: ys}, {clicks: this.state.clicks + 1}, {lastIndex: -1}));
+      this.setState(_.assign({}, this.state, {squares: ys}, {lastIndex: -1}));
     }
     else {
-      this.setState(_.assign({}, this.state, {squares: xs}, {clicks: this.state.clicks + 1}, {lastIndex: -1}));
+      this.setState(_.assign({}, this.state, {squares: xs}, {lastIndex: -1}));
     }
+    this.timer = null;
   }
 
   handle_click(ii) {
-    let xs = _.map(this.state.squares, (square, jj) => {
-      if (ii == jj) {
-        return _.assign({}, square, {completed: true});
+    if(this.timer == null) {
+      let xs = _.map(this.state.squares, (square, jj) => {
+        if (ii == jj) {
+          return _.assign({}, square, {completed: true});
+        }
+        else {
+          return square;
+        }
+      });
+
+      if (this.state.lastIndex == -1) {
+        this.setState(_.assign({}, this.state, {squares: xs}, {clicks: this.state.clicks + 1}, {lastIndex: ii}));
       }
       else {
-        return square;
-      }
-    });
+        this.setState(_.assign({}, this.state, {squares: xs}, {clicks: this.state.clicks + 1}));
 
-    if (this.state.lastIndex == -1) {
-      this.setState(_.assign({}, this.state, {squares: xs}, {clicks: this.state.clicks + 1}, {lastIndex: ii}));
-    }
-    else {
-      this.setState(_.assign({}, this.state, {squares: xs}, {clicks: this.state.clicks + 1}));
-      setTimeout(this.check_match(ii, xs), 1000);
+        this.timer = setTimeout((function() { this.check_match(ii) }).bind(this), 1000);
+      }
     }
   }
 
