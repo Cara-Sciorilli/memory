@@ -10,8 +10,10 @@ export default function game_init(root) {
 class Starter extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      squares: [
+    this.timer = null;
+    const shuffle = require('fisher-yates-shuffle');
+    this.listOfSquares =
+      [
         {value: "A", completed: false},
         {value: "G", completed: false},
         {value: "C", completed: false},
@@ -28,36 +30,25 @@ class Starter extends React.Component {
         {value: "F", completed: false},
         {value: "B", completed: false},
         {value: "H", completed: false}
-      ],
+      ];
+    const shuffleDeck = shuffle(this.listOfSquares);
+    this.state = {
+      squares: shuffleDeck,
       clicks: 0,
       lastIndex: -1,
     };
   }
 
   reset_game() {
+    this.timer = null;
+    const shuffle = require('fisher-yates-shuffle');
+    const shuffleDeck = shuffle(this.listOfSquares);
+
     this.setState({
-      squares: [
-        {value: "A", completed: false},
-        {value: "G", completed: false},
-        {value: "C", completed: false},
-        {value: "D", completed: false},
-        {value: "C", completed: false},
-        {value: "F", completed: false},
-        {value: "G", completed: false},
-        {value: "H", completed: false},
-        {value: "E", completed: false},
-        {value: "B", completed: false},
-        {value: "A", completed: false},
-        {value: "D", completed: false},
-        {value: "E", completed: false},
-        {value: "F", completed: false},
-        {value: "B", completed: false},
-        {value: "H", completed: false}
-      ],
+      squares: shuffleDeck,
       clicks: 0,
       lastIndex: -1,
     });
-    this.timer = null;
   }
 
   check_match(ii) {
