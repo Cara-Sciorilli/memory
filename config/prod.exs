@@ -10,12 +10,15 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :memory, MemoryWeb.Endpoint,
+  http: [port: {:system, "PORT"}],
+  url: [host: "memory2.carawebdev.com", port: 80],
   server: true,
-  root: ".",
+  cache_static_manifest: "priv/static/cache_manifest.json",
   version: Application.spec(:phoenix_distillery, :vsn),
-  http: [:inet6, port: {:system, "PORT"}],
-  url: [host: "memory1.carawebdev.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  root: "."
+
+
+
 
 # Do not print debug messages in production
 config :logger, level: :info
